@@ -82,7 +82,11 @@
 #include "client.h"
 #include "MMonit.h"
 
+#include "apiResponse.c"
+// #include "processor.c"
+
 #include <ulfius.h>
+// #include <jansson.h>
 
 // libmonit
 #include "Bootstrap.h"
@@ -169,61 +173,145 @@ int main(int argc, char **argv)
         do_exit(false);
         return 0;
 }
+
+/**
+ * Returns a new HttpResponse object wrapping a default response. Use
+ * the set_XXX methods to change the object.
+ */
+static HttpResponse create_HttpResponse(Socket_T S)
+{
+        HttpResponse res = NULL;
+        NEW(res);
+        res->S = S;
+        res->status = SC_OK;
+        res->outputbuffer = StringBuffer_create(256);
+        res->is_committed = false;
+        res->protocol = SERVER_PROTOCOL;
+        res->status_msg = get_status_string(SC_OK);
+        Util_getToken(res->token);
+        return res;
+}
+int callback_create_services(const struct _u_request *request, struct _u_response *response, void *user_data)
+{
+        boolean_t b = false;
+        Service_T result = NULL;
+        for (Service_T s = servicelist; s; s = s->next)
+        {
+                char new_str[200];
+                sprintf(new_str, "/create-service/");
+                strcat(new_str, s->name);
+                if (!strcmp(new_str, request->http_url))
+                {
+                        b = true;
+                        result = s;
+                        break;
+                }
+        }
+        if (!b)
+        {
+                Socket_T new_socket = Socket_new("localhost", 2323, Socket_Tcp, Socket_Ip, false, 123);
+                HttpResponse res = create_HttpResponse(new_socket);
+
+                do_service(res, result);
+                //                 json_t *json_body = NULL;
+                //                 json_body = json_object();
+                //                 char *htmlTableFormat = StringBuffer_toString(res->outputbuffer);
+                //                   json_object_set_new(json_body, "nbsheep", "HI");
+                //   json_object_set_new(json_body, "n1sheep", "EFCSA");
+                ulfius_set_string_body_response(response, 200,StringBuffer_toString( res->outputbuffer));
+                // ulfius_set_json_body_response(response, 200, json_body);
+                // json_decref(json_body);
+        }
+        //   sprintf(str, "%d", result->inf.process->_pid);
+        else
+        {
+                char str[200];
+
+                sprintf(str, "Service already available");
+                //   do_service(request,response, reslt)
+                ulfius_set_string_body_response(response, 200, str);
+        }
+        return U_CALLBACK_CONTINUE;
+}
+int callback_services(const struct _u_request *request, struct _u_response *response, void *user_data)
+{
+        boolean_t b = false;
+        Service_T result = NULL;
+        for (Service_T s = servicelist; s; s = s->next)
+        {
+                char new_str[200];
+                sprintf(new_str, "/service/");
+                strcat(new_str, s->name);
+                if (!strcmp(new_str, request->http_url))
+                {
+                        b = true;
+                        result = s;
+                        break;
+                }
+        }
+        if (b)
+        {
+                Socket_T new_socket = Socket_new("localhost", 2323, Socket_Tcp, Socket_Ip, false, 123);
+                HttpResponse res = create_HttpResponse(new_socket);
+
+                do_service(res, result);
+                //                 json_t *json_body = NULL;
+                //                 json_body = json_object();
+                //                 char *htmlTableFormat = StringBuffer_toString(res->outputbuffer);
+                //                   json_object_set_new(json_body, "nbsheep", "HI");
+                //   json_object_set_new(json_body, "n1sheep", "EFCSA");
+                
+                ulfius_set_string_body_response(response, 200,StringBuffer_toString( res->outputbuffer));
+                
+                // ulfius_set_json_body_response(response, 200, json_body);
+                // json_decref(json_body);
+        }
+        //   sprintf(str, "%d", result->inf.process->_pid);
+        else
+        {
+                char str[200];
+
+                sprintf(str, "Not available");
+                //   do_service(request,response, reslt)
+                ulfius_set_string_body_response(response, 200, str);
+        }
+        return U_CALLBACK_CONTINUE;
+}
 int callback_hello_world(const struct _u_request *request, struct _u_response *response, void *user_data)
-{       printf("success");
-        ulfius_set_string_body_response(response, 200, "Hello World!");
+{
+        char *new_str;
+        new_str = malloc(200);
+        new_str[0] = '\0'; // ensures the memory is an empty string
+
+        for (Service_T s = servicelist; s; s = s->next)
+        {
+                strcat(new_str, s->name);
+                strcat(new_str, " ");
+        }
+        strcat(new_str, request->http_url);
+        ulfius_set_string_body_response(response, 200, new_str);
+
+        return U_CALLBACK_CONTINUE;
+}
+
+int callback_listservices(const struct _u_request *request, struct _u_response *response, void *user_data)
+{
+        char *new_str;
+        new_str = malloc(200);
+        new_str[0] = '\0'; // ensures the memory is an empty string
+
+        for (Service_T s = servicelist; s; s = s->next)
+                strcat(new_str, s->name);
+
+        ulfius_set_string_body_response(response, 200, new_str);
         return U_CALLBACK_CONTINUE;
 }
 int callback_world(const struct _u_request *request, struct _u_response *response, void *user_data)
-{       printf("success");
+{
+        ulfius_set_string_body_response(response, 200, "Hello World!");
         ulfius_set_string_body_response(response, 200, "Hello World!");
 
         return U_CALLBACK_CONTINUE;
-}
-void init_api(void)
-{
-        struct _u_instance instance;
-        // Initialize instance with the port number
-        if (ulfius_init_instance(&instance, API_PORT, NULL, NULL) != U_OK)
-        {
-                fprintf(stderr, "Error ulfius_init_instance, abort\n");
-        }
-// pid_t pid;
-//         /*
-//          * Become a session leader to lose our controlling terminal
-//          */
-//         if ((pid = fork ()) < 0) {
-//                 LogError("Cannot fork a new process\n");
-//                 exit (1);
-//         } else if (pid != 0) {
-//                 _exit(0);
-//         }
-//         setsid();
-//         if ((pid = fork ()) < 0) {
-//                 LogError("Cannot fork a new process\n");
-//                 exit (1);
-//         } else if (pid != 0) {
-//                 _exit(0);
-//         }
-        // Endpoint list declaration
-        ulfius_add_endpoint_by_val(&instance, "GET", "/helloworld", NULL, 0, &callback_world, NULL);
-        ulfius_add_endpoint_by_val(&instance, "GET", "/world", NULL, 0, &callback_hello_world, NULL);
-      
-
-        // Start the framework
-        if (ulfius_start_framework(&instance) == U_OK)
-        {
-                LogInfo("Start framework on port %d\n", instance.port);
-                // Wait for the user to press <enter> on the console to quit the application
-        }
-        else
-        {
-                fprintf(stderr, "Error starting framework\n");
-        }
-          printf("End framework\n");
-
-        //   ulfius_stop_framework(&instance);
-        //   ulfius_clean_instance(&instance);
 }
 
 /**
@@ -645,7 +733,6 @@ static void do_default()
 
                 if (Run.startdelay)
                         LogInfo("Monit start delay set to %ds\n", Run.startdelay);
-       
 
                 if (!(Run.flags & Run_Foreground))
                         daemonize();
@@ -688,26 +775,27 @@ static void do_default()
                         Thread_create(heartbeatThread, heartbeat, NULL);
                         heartbeatRunning = true;
                 }
- struct _u_instance instance;
-        // Initialize instance with the port number
-        if (ulfius_init_instance(&instance, API_PORT, NULL, NULL) != U_OK)
-        {
-                fprintf(stderr, "Error ulfius_init_instance, abort\n");
-        }
-        ulfius_add_endpoint_by_val(&instance, "GET", "/helloworld", NULL, 0, &callback_hello_world, NULL);
-        ulfius_add_endpoint_by_val(&instance, "GET", "/world", NULL, 0, &callback_world, NULL);
-      
+                struct _u_instance instance;
+                // Initialize instance with the port number
+                if (ulfius_init_instance(&instance, API_PORT, NULL, NULL) != U_OK)
+                {
+                        fprintf(stderr, "Error ulfius_init_instance, abort\n");
+                }
+                ulfius_add_endpoint_by_val(&instance, "GET", "/listServices", NULL, 0, &callback_listservices, NULL);
+                ulfius_add_endpoint_by_val(&instance, "GET", "/world", NULL, 0, &callback_world, NULL);
+                ulfius_add_endpoint_by_val(&instance, "GET", "/service/*", NULL, 0, &callback_services, NULL);
+                ulfius_add_endpoint_by_val(&instance, "GET", "/helloworld", NULL, 0, &callback_hello_world, NULL);
 
-        // Start the framework
-        if (ulfius_start_framework(&instance) == U_OK)
-        {
-                LogInfo("Start framework on port %d\n", instance.port);
-                // Wait for the user to press <enter> on the console to quit the application
-        }
-        else
-        {
-                fprintf(stderr, "Error starting framework\n");
-        }
+                // Start the framework
+                if (ulfius_start_framework(&instance) == U_OK)
+                {
+                        LogInfo("Start framework on port %d\n", instance.port);
+                        // Wait for the user to press <enter> on the console to quit the application
+                }
+                else
+                {
+                        fprintf(stderr, "Error starting framework\n");
+                }
                 while (true)
                 {
                         validate();

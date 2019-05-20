@@ -60,7 +60,7 @@ configure:3060: found /usr/bin/gcc
 configure:3071: result: gcc
 configure:3300: checking for C compiler version
 configure:3309: gcc --version >&5
-gcc (Ubuntu 5.4.0-6ubuntu1~16.04.10) 5.4.0 20160609
+gcc (Ubuntu 5.4.0-6ubuntu1~16.04.11) 5.4.0 20160609
 Copyright (C) 2015 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -71,9 +71,9 @@ Using built-in specs.
 COLLECT_GCC=gcc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/5/lto-wrapper
 Target: x86_64-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion='Ubuntu 5.4.0-6ubuntu1~16.04.10' --with-bugurl=file:///usr/share/doc/gcc-5/README.Bugs --enable-languages=c,ada,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-5 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-5-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-5-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-5-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 5.4.0-6ubuntu1~16.04.11' --with-bugurl=file:///usr/share/doc/gcc-5/README.Bugs --enable-languages=c,ada,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-5 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-5-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-5-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-5-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
 Thread model: posix
-gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.10) 
+gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.11) 
 configure:3320: $? = 0
 configure:3309: gcc -V >&5
 gcc: error: unrecognized command line option '-V'
@@ -454,7 +454,7 @@ configure:12475: $? = 0
 configure:12484: result: yes
 configure:12495: checking for crypt in -lc
 configure:12520: gcc -o conftest -g -O2   conftest.c -lc  -lresolv -lnsl  >&5
-/tmp/ccNNXMi2.o: In function `main':
+/tmp/ccq4Hwgx.o: In function `main':
 /home/piyush/monit-5.25.3/conftest.c:36: undefined reference to `crypt'
 collect2: error: ld returned 1 exit status
 configure:12520: $? = 1
@@ -12171,7 +12171,7 @@ conftest.c: In function 'main':
 conftest.c:123:1: warning: implicit declaration of function 'SSLv2_client_method' [-Wimplicit-function-declaration]
  SSLv2_client_method()
  ^
-/tmp/cccouF68.o: In function `main':
+/tmp/ccp85QPR.o: In function `main':
 /home/piyush/monit-5.25.3/conftest.c:123: undefined reference to `SSLv2_client_method'
 collect2: error: ld returned 1 exit status
 configure:15895: $? = 1
@@ -12317,7 +12317,7 @@ conftest.c: In function 'main':
 conftest.c:125:1: warning: implicit declaration of function 'TLSv1_3_method' [-Wimplicit-function-declaration]
  TLSv1_3_method()
  ^
-/tmp/ccGZ5tGx.o: In function `main':
+/tmp/ccUfx8Xe.o: In function `main':
 /home/piyush/monit-5.25.3/conftest.c:125: undefined reference to `TLSv1_3_method'
 collect2: error: ld returned 1 exit status
 configure:15979: $? = 1
