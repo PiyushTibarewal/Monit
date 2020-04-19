@@ -152,7 +152,8 @@ am_monit_OBJECTS = src/y.tab.$(OBJEXT) src/lex.yy.$(OBJEXT) \
 	src/terminal/Box.$(OBJEXT) src/terminal/Color.$(OBJEXT)
 monit_OBJECTS = $(am_monit_OBJECTS)
 monit_DEPENDENCIES = libmonit/libmonit.la ulfius/src/libulfius.so \
-	orcania/src/liborcania.so yder/src/libyder.so
+	orcania/src/liborcania.so yder/src/libyder.so \
+	jansson/src/libjansson.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -523,7 +524,7 @@ monit_SOURCES = src/y.tab.c \
 		  src/terminal/Box.c \
 		  src/terminal/Color.c 
 
-monit_LDADD = libmonit/libmonit.la ulfius/src/libulfius.so orcania/src/liborcania.so yder/src/libyder.so 
+monit_LDADD = libmonit/libmonit.la ulfius/src/libulfius.so orcania/src/liborcania.so yder/src/libyder.so jansson/src/libjansson.la
 monit_LDFLAGS = -static $(EXTLDFLAGS)
 man_MANS = monit.1
 BUILT_SOURCES = src/lex.yy.c src/y.tab.c src/tokens.h

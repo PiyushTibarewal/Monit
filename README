@@ -1,3 +1,6 @@
+Monit:
+Added feature in the source code of an open-source system monitoring software called Monit, to fetch the system details using REST API in C.​ ​Used package called ulfius for rest-api (​https://github.com/babelouest/ulfius​). It seemed the easiest to implement in C after trying out a couple of options. Have defined an API port number option in ‘monit.h’ form where the port number can be edited. The callback functions are defined in ‘monit.c’. Currently it is returning the httpResponse similar to that provided by the ​native HTTP web server (maybe need to change it to JSON format: can be written in some other language and sent on another port). On hitting “​/listServices" ​we get the currently active list of services and on hitting ​"/service/*" ​we get the details of the corresponding service we desire. The feature to add a service externally can be done via http request if we run an independent program which makes insertion to a file. And the file can be imported in monitrc.​ ​Changes to make file are required to further add any package. It can be done in a similar fashion as ulfius. Ulfius had other dependencies like jansson were required to be added.
+The following is the original README of Monit.
 
 MONIT - UNIX Systems Management
 

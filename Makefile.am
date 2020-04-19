@@ -91,7 +91,7 @@ monit_SOURCES	= src/y.tab.c \
 		  src/terminal/Box.c \
 		  src/terminal/Color.c 
 
-monit_LDADD 	= libmonit/libmonit.la ulfius/src/libulfius.so orcania/src/liborcania.so yder/src/libyder.so 
+monit_LDADD 	= libmonit/libmonit.la ulfius/src/libulfius.so orcania/src/liborcania.so yder/src/libyder.so jansson/src/libjansson.la
 monit_LDFLAGS 	= -static $(EXTLDFLAGS)
 
 man_MANS 	= monit.1

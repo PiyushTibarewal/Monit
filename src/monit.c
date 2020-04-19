@@ -86,7 +86,7 @@
 // #include "processor.c"
 
 #include <ulfius.h>
-// #include <jansson.h>
+#include <jansson.h>
 
 // libmonit
 #include "Bootstrap.h"
@@ -218,7 +218,7 @@ int callback_create_services(const struct _u_request *request, struct _u_respons
                 //                 char *htmlTableFormat = StringBuffer_toString(res->outputbuffer);
                 //                   json_object_set_new(json_body, "nbsheep", "HI");
                 //   json_object_set_new(json_body, "n1sheep", "EFCSA");
-                ulfius_set_string_body_response(response, 200,StringBuffer_toString( res->outputbuffer));
+                ulfius_set_string_body_response(response, 200, StringBuffer_toString(res->outputbuffer));
                 // ulfius_set_json_body_response(response, 200, json_body);
                 // json_decref(json_body);
         }
@@ -255,16 +255,16 @@ int callback_services(const struct _u_request *request, struct _u_response *resp
                 HttpResponse res = create_HttpResponse(new_socket);
 
                 do_service(res, result);
-                //                 json_t *json_body = NULL;
-                //                 json_body = json_object();
+                json_t *json_body = NULL;
+                json_body = json_object();
                 //                 char *htmlTableFormat = StringBuffer_toString(res->outputbuffer);
-                //                   json_object_set_new(json_body, "nbsheep", "HI");
+                json_object_set_new(json_body, "nbsheep", "HI");
                 //   json_object_set_new(json_body, "n1sheep", "EFCSA");
-                
-                ulfius_set_string_body_response(response, 200,StringBuffer_toString( res->outputbuffer));
-                
-                // ulfius_set_json_body_response(response, 200, json_body);
-                // json_decref(json_body);
+
+                // ulfius_set_string_body_response(response, 200,StringBuffer_toString( res->outputbuffer));
+
+                ulfius_set_json_body_response(response, 200, json_body);
+                json_decref(json_body);
         }
         //   sprintf(str, "%d", result->inf.process->_pid);
         else
